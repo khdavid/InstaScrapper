@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34322.80
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "InstScrapper", "InstScrapper\InstScrapper.pyproj", "{2B6562B9-6692-4DB1-A848-B6A494ADD516}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B6562B9-6692-4DB1-A848-B6A494ADD516}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B6562B9-6692-4DB1-A848-B6A494ADD516}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9CB3309B-75AF-4A80-9215-6576FEF9D307}
+	EndGlobalSection
+EndGlobal
