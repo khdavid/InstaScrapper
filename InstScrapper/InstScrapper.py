@@ -9,6 +9,7 @@ from time import sleep
 import time
 # Path to your Chrome profile
 chrome_profile_path = r"C:\Users\David.Khudaverdyan\AppData\Local\Google\Chrome\User Data - Copy"
+url_instagram_profile = r"https://www.instagram.com/kunzhut_kunzhut/"
 
 
 
@@ -49,17 +50,17 @@ def create_driver():
   driver = webdriver.Chrome(options=chrome_options)
   return driver
 
+def open_instagram_profile(driver):
+  driver.get(url_instagram_profile)
+  sleep(1)
+
+def click_on_first_picture(driver):
+  action = ActionChains(driver)
+  action.move_by_offset(760, 380).perform()
+  action.click().perform()
+  
+
 driver = create_driver();
-# Now you can use the driver to navigate to a website
-driver.get("https://www.instagram.com/kunzhut_kunzhut/")
-sleep(1)
-# Create an ActionChains object
-action = ActionChains(driver)
-action.move_by_offset(760, 380).perform()
-action.click().perform()
-
-
-
-
-# Example usage
+open_instagram_profile(driver)
+click_on_first_picture(driver)
 # navigate_and_capture(driver, 100, 800, 100, 600, 5)
