@@ -1,3 +1,4 @@
+from calendar import c
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -32,27 +33,29 @@ def navigate_and_capture(driver, x_min, x_max, y_min, y_max, iterations):
         
         # Wait a bit for the page to load/update
         time.sleep(0.5)  # Adjust this delay as necessary for page load times
-
+        
     driver.quit()
+    
+def create_driver():
+  # Create ChromeOptions object
+  chrome_options = webdriver.ChromeOptions()
+  
+  # Add the path to your profile directory
+  chrome_options.add_argument("user-data-dir=" + chrome_profile_path)
+  chrome_options.add_argument("--profile-directory=Profile 1")  # Add this line if your profile directory has a specific name
+  
+  
+  # Initialize Chrome driver with the specified options
+  driver = webdriver.Chrome(options=chrome_options)
+  return driver
 
-# Create ChromeOptions object
-chrome_options = webdriver.ChromeOptions()
-
-# Add the path to your profile directory
-chrome_options.add_argument("user-data-dir=" + chrome_profile_path)
-chrome_options.add_argument("--profile-directory=Profile 1")  # Add this line if your profile directory has a specific name
-
-
-# Initialize Chrome driver with the specified options
-driver = webdriver.Chrome(options=chrome_options)
-
+driver = create_driver();
 # Now you can use the driver to navigate to a website
 driver.get("https://www.instagram.com/kunzhut_kunzhut/")
 sleep(1)
 # Create an ActionChains object
 action = ActionChains(driver)
 action.move_by_offset(760, 380).perform()
-
 action.click().perform()
 
 
