@@ -14,24 +14,26 @@ temp_screenshot_file_name = "full_screenshot.png"
 instagram_profile_name = r"kunzhut_kunzhut"
 url_instagram = r"https://www.instagram.com/" 
 first_picture_coords = [760, 380]
+cropping_bbox = [376, 21, 1521, 754]
 
-def take_screenshot(driver, x_min, x_max, y_min, y_max, filename):
+
+def take_screenshot(driver, filename):
     temp_screenshot_path = working_dir + temp_screenshot_file_name
     driver.save_screenshot(temp_screenshot_path)
     from PIL import Image
     image = Image.open(temp_screenshot_path)
-    cropped_image = image.crop((x_min, y_min, x_max, y_max))
-    cropped_image.save(working_dir + filename)
+    cropped_image = image.crop((cropping_bbox[0], cropping_bbox[1], cropping_bbox[2], cropping_bbox[3]))
+    cropped_image.save(os.path.join(working_dir, instagram_profile_name, filename))
     
 def create_directory_if_not_exists(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-def navigate_and_capture(driver, x_min, x_max, y_min, y_max, iterations):
+def navigate_and_capture(driver, iterations):
     create_directory_if_not_exists(working_dir + instagram_profile_name)
     for i in range(iterations):
         screenshot_filename = f"screenshot_{i}.png"
-        take_screenshot(driver, x_min, x_max, y_min, y_max, screenshot_filename)
+        take_screenshot(driver, screenshot_filename)
         driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_RIGHT)
     # driver.quit()
     
@@ -61,4 +63,4 @@ def click_on_first_picture(driver):
 driver = create_driver();
 open_instagram_profile(driver)
 click_on_first_picture(driver)
-navigate_and_capture(driver, 100, 800, 100, 600, 5)
+navigate_and_capture(driver, 5)
