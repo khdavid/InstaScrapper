@@ -37,6 +37,16 @@ def create_directory_if_not_exists(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+def generate_unique_file_path(file_path_candidate):
+    base, ext = os.path.splitext(file_path_candidate)
+    ind = 0
+    while True:
+        result = f"{base}_{ind}{ext}"
+        if not os.path.exists(result):
+            return result 
+        
+        ind += 1
+
 def generate_screenshot_file_path(date_time_str, index):
     filename = ''
     if date_time_str:
@@ -44,8 +54,9 @@ def generate_screenshot_file_path(date_time_str, index):
     else:
         filename = f"screenshot_{index}.png"
 
-    return os.path.join(working_dir, instagram_profile_name, filename)
-    
+    return generate_unique_file_path(
+       os.path.join(working_dir, instagram_profile_name, filename))  
+        
 def go_to_next_picture(driver):
     elements = driver.find_elements(By.CLASS_NAME, next_picture_from_same_set_class_name)
     if len(elements) > 0:
@@ -64,15 +75,9 @@ def navigate_and_capture(driver):
         go_to_next_picture(driver)
     
 def create_driver():
-  # Create ChromeOptions object
   chrome_options = webdriver.ChromeOptions()
-  
-  # Add the path to your profile directory
   chrome_options.add_argument("user-data-dir=" + chrome_profile_path)
-  chrome_options.add_argument("--profile-directory=Profile 1")  # Add this line if your profile directory has a specific name
-  
-  
-  # Initialize Chrome driver with the specified options
+  chrome_options.add_argument("--profile-directory=Profile 1")
   driver = webdriver.Chrome(options=chrome_options)
   return driver
 
@@ -89,13 +94,8 @@ def extract_datetime(driver):
   elements = driver.find_elements(By.CLASS_NAME, date_class_name)
   for element in elements:
     if element.get_attribute(date_attribute):
-        # Get the 'datetime' attribute value
         datetime_str = element.get_attribute(date_attribute)
-
-        # Convert the string to a datetime object
         dt = datetime.fromisoformat(datetime_str.replace('Z', '+00:00'))
-
-        # Format the datetime object to the desired format
         formatted_date = dt.strftime('%Y_%m_%d_%H_%M_%S')
         return formatted_date
   
