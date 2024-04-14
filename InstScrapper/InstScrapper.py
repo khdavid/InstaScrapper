@@ -20,6 +20,7 @@ url_instagram = r"https://www.instagram.com/"
 first_picture_coords = [760, 380]
 cropping_bbox = [376, 21, 1521, 754]
 max_iteratinos = 5
+sleep_after_next_picture_sec = 0.5
 date_class_name = "x1p4m5qa"
 date_attribute = "datetime"
 next_picture_from_same_set_class_name = "_9zm2"
@@ -43,8 +44,13 @@ def generate_file_name(date_time_str):
         return f"screenshot_{i}.png"
     
 def go_to_next_picture(driver):
-    driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_RIGHT)
-    time.sleep(0.5)
+    elements = driver.find_elements(By.CLASS_NAME, next_picture_from_same_set_class_name)
+    if len(elements) > 0:
+      elements[0].click() 
+    else:
+      driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_RIGHT)
+
+    time.sleep(sleep_after_next_picture_sec)
 
 def navigate_and_capture(driver, iterations):
     create_directory_if_not_exists(working_dir + instagram_profile_name)
