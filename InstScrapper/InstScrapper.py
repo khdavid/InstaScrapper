@@ -9,6 +9,7 @@ from time import sleep
 from datetime import datetime
 import time
 import os
+import shutil
 
 chrome_profile_path = r"C:\Users\David.Khudaverdyan\AppData\Local\Google\Chrome\User Data - Copy"
 working_dir = r"D:/temp/inst/"
@@ -33,9 +34,11 @@ def take_screenshot(driver, file_path):
     cropped_image = image.crop((cropping_bbox[0], cropping_bbox[1], cropping_bbox[2], cropping_bbox[3]))
     cropped_image.save(file_path)
     
-def create_directory_if_not_exists(directory):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+def force_create_empty_dir(directory):
+    if os.path.exists(directory):
+        shutil.rmtree(directory) 
+
+    os.makedirs(directory)
 
 def generate_unique_file_path(file_path_candidate):
     base, ext = os.path.splitext(file_path_candidate)
@@ -67,7 +70,7 @@ def go_to_next_picture(driver):
     time.sleep(sleep_after_next_picture_sec)
 
 def navigate_and_capture(driver):
-    create_directory_if_not_exists(working_dir + instagram_profile_name)
+    force_create_empty_dir(working_dir + instagram_profile_name)
     for index in range(max_iterations):
         date_time_str = extract_datetime(driver)
         screenshot_file_path = generate_screenshot_file_path(date_time_str, index)
