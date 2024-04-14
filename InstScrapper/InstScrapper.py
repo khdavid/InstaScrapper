@@ -19,29 +19,32 @@ url_instagram = r"https://www.instagram.com/"
 # unmutable constants
 first_picture_coords = [760, 380]
 cropping_bbox = [376, 21, 1521, 754]
-max_iteratinos = 5
+max_iterations = 5
 sleep_after_next_picture_sec = 0.5
 date_class_name = "x1p4m5qa"
 date_attribute = "datetime"
 next_picture_from_same_set_class_name = "_9zm2"
 
-def take_screenshot(driver, filename):
+def take_screenshot(driver, file_path):
     temp_screenshot_path = working_dir + temp_screenshot_file_name
     driver.save_screenshot(temp_screenshot_path)
     from PIL import Image
     image = Image.open(temp_screenshot_path)
     cropped_image = image.crop((cropping_bbox[0], cropping_bbox[1], cropping_bbox[2], cropping_bbox[3]))
-    cropped_image.save(os.path.join(working_dir, instagram_profile_name, filename))
+    cropped_image.save(file_path)
     
 def create_directory_if_not_exists(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-def generate_file_name(date_time_str):
+def generate_screenshot_file_path(date_time_str, index):
+    filename = ''
     if date_time_str:
-        return f"{date_time_str}.png"
+        filename = f"{date_time_str}.png"
     else:
-        return f"screenshot_{i}.png"
+        filename = f"screenshot_{index}.png"
+
+    return os.path.join(working_dir, instagram_profile_name, filename)
     
 def go_to_next_picture(driver):
     elements = driver.find_elements(By.CLASS_NAME, next_picture_from_same_set_class_name)
@@ -52,12 +55,12 @@ def go_to_next_picture(driver):
 
     time.sleep(sleep_after_next_picture_sec)
 
-def navigate_and_capture(driver, iterations):
+def navigate_and_capture(driver):
     create_directory_if_not_exists(working_dir + instagram_profile_name)
-    for i in range(iterations):
+    for index in range(max_iterations):
         date_time_str = extract_datetime(driver)
-        screenshot_filename = generate_file_name(date_time_str)
-        take_screenshot(driver, screenshot_filename)
+        screenshot_file_path = generate_screenshot_file_path(date_time_str, index)
+        take_screenshot(driver, screenshot_file_path)
         go_to_next_picture(driver)
     
 def create_driver():
@@ -101,4 +104,4 @@ def extract_datetime(driver):
 driver = create_driver();
 open_instagram_profile(driver)
 click_on_first_picture(driver)
-navigate_and_capture(driver, max_iteratinos)
+navigate_and_capture(driver)
