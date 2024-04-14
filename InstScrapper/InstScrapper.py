@@ -24,7 +24,6 @@ date_class_name = "x1p4m5qa"
 date_attribute = "datetime"
 next_picture_from_same_set_class_name = "_9zm2"
 
-
 def take_screenshot(driver, filename):
     temp_screenshot_path = working_dir + temp_screenshot_file_name
     driver.save_screenshot(temp_screenshot_path)
@@ -46,7 +45,6 @@ def generate_file_name(date_time_str):
 def go_to_next_picture(driver):
     driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_RIGHT)
     time.sleep(0.5)
-
 
 def navigate_and_capture(driver, iterations):
     create_directory_if_not_exists(working_dir + instagram_profile_name)
@@ -93,9 +91,6 @@ def extract_datetime(driver):
         return formatted_date
   
   return None
-
-   
-  
 
 driver = create_driver();
 open_instagram_profile(driver)
