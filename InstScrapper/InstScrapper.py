@@ -1,4 +1,5 @@
 from calendar import c
+from re import T
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -15,6 +16,7 @@ instagram_profile_name = r"kunzhut_kunzhut"
 url_instagram = r"https://www.instagram.com/" 
 first_picture_coords = [760, 380]
 cropping_bbox = [376, 21, 1521, 754]
+max_iteratinos = 50
 
 
 def take_screenshot(driver, filename):
@@ -28,14 +30,16 @@ def take_screenshot(driver, filename):
 def create_directory_if_not_exists(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
+        
 
 def navigate_and_capture(driver, iterations):
     create_directory_if_not_exists(working_dir + instagram_profile_name)
     for i in range(iterations):
         screenshot_filename = f"screenshot_{i}.png"
         take_screenshot(driver, screenshot_filename)
+        current_url = driver.current_url
         driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_RIGHT)
-    # driver.quit()
+        time.sleep(0.5)
     
 def create_driver():
   # Create ChromeOptions object
@@ -63,4 +67,4 @@ def click_on_first_picture(driver):
 driver = create_driver();
 open_instagram_profile(driver)
 click_on_first_picture(driver)
-navigate_and_capture(driver, 5)
+navigate_and_capture(driver, max_iteratinos)
