@@ -76,7 +76,7 @@ def create_log_file_path():
     
 def log(full_path, text):
     with open(full_path, 'a') as file:
-        file.write(text + "\n")  # Append the text with a newline at the end
+        file.write(text + "\n")
 
 def navigate_and_capture(driver):
     log_file_path = create_log_file_path()
