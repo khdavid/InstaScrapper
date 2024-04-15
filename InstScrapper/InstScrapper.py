@@ -19,9 +19,9 @@ url_instagram = r"https://www.instagram.com/"
 
 # unmutable constants
 first_picture_coords = [760, 380]
-cropping_bbox = [376, 21, 1521, 754]
-max_iterations = 5
-sleep_after_next_picture_sec = 0.5
+cropping_bbox = [376, 25, 1521, 754]
+max_iterations = 6000
+sleep_after_next_picture_sec = 2
 date_class_name = "x1p4m5qa"
 date_attribute = "datetime"
 next_picture_from_same_set_class_name = "_9zm2"
@@ -76,7 +76,7 @@ def navigate_and_capture(driver):
         screenshot_file_path = generate_screenshot_file_path(date_time_str, index)
         take_screenshot(driver, screenshot_file_path)
         go_to_next_picture(driver)
-    
+            
 def create_driver():
   chrome_options = webdriver.ChromeOptions()
   chrome_options.add_argument("user-data-dir=" + chrome_profile_path)
