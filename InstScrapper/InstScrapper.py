@@ -68,13 +68,25 @@ def go_to_next_picture(driver):
       driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_RIGHT)
 
     time.sleep(sleep_after_next_picture_sec)
+    
+def create_log_file_path():
+    current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    log_filename = f"{instagram_profile_name}_{current_time}.log"
+    return os.path.join(working_dir, log_filename)
+    
+def log(full_path, text):
+    with open(full_path, 'a') as file:
+        file.write(text + "\n")  # Append the text with a newline at the end
 
 def navigate_and_capture(driver):
+    log_file_path = create_log_file_path()
+    log(log_file_path, f"Number of iterations = {max_iterations}");
     force_create_empty_dir(working_dir + instagram_profile_name)
     for index in range(max_iterations):
         date_time_str = extract_datetime(driver)
         screenshot_file_path = generate_screenshot_file_path(date_time_str, index)
         take_screenshot(driver, screenshot_file_path)
+        log(log_file_path, f"{index}: path: {screenshot_file_path} url: {driver.current_url}");
         go_to_next_picture(driver)
             
 def create_driver():
@@ -99,7 +111,7 @@ def extract_datetime(driver):
     if element.get_attribute(date_attribute):
         datetime_str = element.get_attribute(date_attribute)
         dt = datetime.fromisoformat(datetime_str.replace('Z', '+00:00'))
-        formatted_date = dt.strftime('%Y_%m_%d_%H_%M_%S')
+        formatted_date = dt.strftime('%Y-%m-%d_%H-%M-%S')
         return formatted_date
   
   return None
