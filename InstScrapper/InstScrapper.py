@@ -62,12 +62,22 @@ def generate_screenshot_file_path(date_time_str, index):
         
 def go_to_next_picture(driver):
     elements = driver.find_elements(By.CLASS_NAME, next_picture_from_same_set_class_name)
+    current_url = driver.current_url
+    right_arrow_pressed = False
     if len(elements) > 0:
       elements[0].click() 
     else:
+      right_arrow_pressed = True
       driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ARROW_RIGHT)
 
     time.sleep(sleep_after_next_picture_sec)
+    
+    # this weird logic is needed, since sometimes current_link 
+    # is not updated when next picture in set is clicked
+    if not right_arrow_pressed:
+       return True
+    
+    return current_url != driver.current_url  
     
 def create_log_file_path():
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -87,7 +97,8 @@ def navigate_and_capture(driver):
         screenshot_file_path = generate_screenshot_file_path(date_time_str, index)
         take_screenshot(driver, screenshot_file_path)
         log(log_file_path, f"{index}: path: {screenshot_file_path} url: {driver.current_url}");
-        go_to_next_picture(driver)
+        if not go_to_next_picture(driver):
+          return;
             
 def create_driver():
   chrome_options = webdriver.ChromeOptions()
