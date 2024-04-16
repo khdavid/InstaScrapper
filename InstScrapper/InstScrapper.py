@@ -20,8 +20,8 @@ url_instagram = r"https://www.instagram.com/"
 # unmutable constants
 first_picture_coords = [760, 380]
 cropping_bbox = [376, 25, 1521, 754]
-max_iterations = 6000
-sleep_after_next_picture_sec = 2
+max_iterations = 20000
+sleep_after_next_picture_sec = 1
 date_class_name = "x1p4m5qa"
 date_attribute = "datetime"
 next_picture_from_same_set_class_name = "_9zm2"
@@ -32,7 +32,10 @@ def take_screenshot(driver, file_path):
     from PIL import Image
     image = Image.open(temp_screenshot_path)
     cropped_image = image.crop((cropping_bbox[0], cropping_bbox[1], cropping_bbox[2], cropping_bbox[3]))
-    cropped_image.save(file_path)
+    if cropped_image.mode == 'RGBA':
+      cropped_image = cropped_image.convert('RGB')    
+    
+      cropped_image.save(file_path, 'jpeg', quality = 95)
     
 def force_create_empty_dir(directory):
     if os.path.exists(directory):
@@ -53,9 +56,9 @@ def generate_unique_file_path(file_path_candidate):
 def generate_screenshot_file_path(date_time_str, index):
     filename = ''
     if date_time_str:
-        filename = f"{date_time_str}.png"
+        filename = f"{date_time_str}.jpg"
     else:
-        filename = f"screenshot_{index}.png"
+        filename = f"screenshot_{index}.jpg"
 
     return generate_unique_file_path(
        os.path.join(working_dir, instagram_profile_name, filename))  
